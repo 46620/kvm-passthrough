@@ -24,7 +24,7 @@ This is for if you already have a working windows VM. This is a very easy thing 
 
 ### CPU
 
-First things first, make sure that you set your CPU to be to pass the model to the VM so it doesn't show up as the wrong CPU type. ![](cpu.png)
+First things first, make sure that you set your CPU to be to pass the model to the VM so it doesn't show up as the wrong CPU type. ![](img/cpu.png)
 
 ### XML
 
