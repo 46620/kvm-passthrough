@@ -35,6 +35,12 @@ virsh nodedev-detach $VIRSH_GPU_AUDIO
 virsh nodedev-detach $VIRSH_GPU_USB
 virsh nodedev-detach $VIRSH_GPU_SERIAL
 
+# Isolate the CPU
+systemctl set-property --runtime -- user.slice AllowedCPUs=0,6
+systemctl set-property --runtime -- system.slice AllowedCPUs=0,6
+systemctl set-property --runtime -- init.scope AllowedCPUs=0,6
+
+
 # load vfio
 modprobe vfio
 modprobe vfio_pci

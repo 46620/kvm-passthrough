@@ -15,6 +15,12 @@ modprobe -r vfio
 modprobe -r vfio_pci
 modprobe -r vfio_iommu_type1
 
+# Unisolate the CPU
+systemctl set-property --runtime -- user.slice AllowedCPUs=0-11
+systemctl set-property --runtime -- system.slice AllowedCPUs=0-11
+systemctl set-property --runtime -- init.scope AllowedCPUs=0-11
+
+
 # Rebind GPU*
 virsh nodedev-reattach $VIRSH_GPU_VIDEO
 virsh nodedev-reattach $VIRSH_GPU_AUDIO
@@ -29,7 +35,7 @@ echo 1 > /sys/class/vtconsole/vtcon1/bind
 nvidia-xconfig --query-gpu-info > /dev/null 2>&1
 
 # Rebind EFI-framebuffer
-echo efi-framebuffer.0 > /sys/bus/platform/drivers/efi-framebuffer/bind
+echo "efi-framebuffer.0" > /sys/bus/platform/drivers/efi-framebuffer/bind
 
 # Reload Nvidia Drivers*
 modprobe nvidia_uvm
