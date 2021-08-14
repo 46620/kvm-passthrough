@@ -2,10 +2,10 @@
 # Anything labeled with a * in the comment needs to be edited by you to work with your setup
 
 # debugging
-start -x
+set -x
 
 # Restart linux host entirely (debug line)
-reboot
+# reboot
 
 # load vars
 source "/etc/libvirt/hooks/kvm.conf"
@@ -19,7 +19,6 @@ modprobe -r vfio_iommu_type1
 systemctl set-property --runtime -- user.slice AllowedCPUs=0-11
 systemctl set-property --runtime -- system.slice AllowedCPUs=0-11
 systemctl set-property --runtime -- init.scope AllowedCPUs=0-11
-
 
 # Rebind GPU*
 virsh nodedev-reattach $VIRSH_GPU_VIDEO
@@ -39,10 +38,10 @@ echo "efi-framebuffer.0" > /sys/bus/platform/drivers/efi-framebuffer/bind
 
 # Reload Nvidia Drivers*
 modprobe nvidia_uvm
-modprobe i2c_nvidia_gpu
-modprobe nvidia_drm
+modprobe i2c_nvidia_gpu # Key was rejected by service
+modprobe nvidia_drm # Key was rejected by service
 modprobe nvidia_modeset
-modprobe drm_kms_helper
+modprobe drm_kms_helper # Key was rejected by service
 modprobe nvidia
 modprobe drm
 

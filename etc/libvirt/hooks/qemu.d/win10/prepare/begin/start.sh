@@ -2,7 +2,7 @@
 # Anything labeled with a * in the comment needs to be edited by you to work with your setup
 
 # debugging
-start -x
+set -x
 
 # load vars
 source "/etc/libvirt/hooks/kvm.conf"
