@@ -99,9 +99,6 @@
       <target chassis="5" port="0x14"/>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x02" function="0x4"/>
     </controller>
-    <controller type="virtio-serial" index="0">
-      <address type="pci" domain="0x0000" bus="0x03" slot="0x00" function="0x0"/>
-    </controller>
     <controller type="pci" index="6" model="pcie-root-port">
       <model name="pcie-root-port"/>
       <target chassis="6" port="0x8"/>
@@ -117,11 +114,25 @@
       <target chassis="8" port="0xa"/>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x01" function="0x2"/>
     </controller>
+    <controller type="pci" index="9" model="pcie-root-port">
+      <model name="pcie-root-port"/>
+      <target chassis="9" port="0xb"/>
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x01" function="0x3"/>
+    </controller>
+    <controller type="virtio-serial" index="0">
+      <address type="pci" domain="0x0000" bus="0x03" slot="0x00" function="0x0"/>
+    </controller>
     <interface type="network">
       <mac address="52:54:00:01:89:7c"/>
       <source network="default"/>
       <model type="virtio"/>
       <address type="pci" domain="0x0000" bus="0x01" slot="0x00" function="0x0"/>
+    </interface>
+    <interface type="network">
+      <mac address="52:54:00:88:f9:3a"/>
+      <source network="default"/>
+      <model type="virtio"/>
+      <address type="pci" domain="0x0000" bus="0x09" slot="0x00" function="0x0"/>
     </interface>
     <serial type="pty">
       <target type="isa-serial" port="0">
@@ -178,6 +189,48 @@
       </source>
       <rom file="/home/mia/Documents/vbios/2080s.rom"/>
       <address type="pci" domain="0x0000" bus="0x08" slot="0x00" function="0x0"/>
+    </hostdev>
+    <hostdev mode="subsystem" type="usb" managed="yes">
+      <source>
+        <vendor id="0x04d9"/>
+        <product id="0x0296"/>
+      </source>
+      <address type="usb" bus="0" port="4"/>
+    </hostdev>
+    <hostdev mode="subsystem" type="usb" managed="yes">
+      <source>
+        <vendor id="0x046d"/>
+        <product id="0xc332"/>
+      </source>
+      <address type="usb" bus="0" port="6"/>
+    </hostdev>
+    <hostdev mode="subsystem" type="usb" managed="yes">
+      <source>
+        <vendor id="0x2040"/>
+        <product id="0xe524"/>
+      </source>
+      <address type="usb" bus="0" port="5"/>
+    </hostdev>
+    <hostdev mode="subsystem" type="usb" managed="yes">
+      <source>
+        <vendor id="0x08bb"/>
+        <product id="0x2902"/>
+      </source>
+      <address type="usb" bus="0" port="7"/>
+    </hostdev>
+    <hostdev mode="subsystem" type="usb" managed="yes">
+      <source>
+        <vendor id="0x056a"/>
+        <product id="0x0374"/>
+      </source>
+      <address type="usb" bus="0" port="8"/>
+    </hostdev>
+    <hostdev mode="subsystem" type="usb" managed="yes">
+      <source>
+        <vendor id="0x0bda"/>
+        <product id="0x0567"/>
+      </source>
+      <address type="usb" bus="0" port="9"/>
     </hostdev>
     <redirdev bus="usb" type="spicevmc">
       <address type="usb" bus="0" port="2"/>
