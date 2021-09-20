@@ -1,6 +1,6 @@
 <domain type="kvm">
   <name>win10</name>
-  <uuid>96c52046-0900-4ec5-b0f3-4da627d61661</uuid>
+  <uuid>1359b45d-4ac7-4fba-8907-b41747e9c087</uuid>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
       <libosinfo:os id="http://microsoft.com/win/10"/>
@@ -10,10 +10,9 @@
   <currentMemory unit="KiB">16384000</currentMemory>
   <vcpu placement="static">10</vcpu>
   <os>
-    <type arch="x86_64" machine="pc-q35-6.0">hvm</type>
+    <type arch="x86_64" machine="pc-q35-6.1">hvm</type>
     <loader readonly="yes" type="rom">/usr/share/edk2-ovmf/x64/OVMF_CODE.fd</loader>
     <nvram>/var/lib/libvirt/qemu/nvram/win10_VARS.fd</nvram>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -35,17 +34,12 @@
     <vmport state="off"/>
     <ioapic driver="kvm"/>
   </features>
-  <cpu mode="host-passthrough" check="partial" migratable="on">
+  <cpu mode="host-passthrough" check="none" migratable="on">
     <topology sockets="1" dies="1" cores="5" threads="2"/>
     <cache mode="passthrough"/>
     <feature policy="disable" name="hypervisor"/>
   </cpu>
-  <clock offset="utc">
-    <timer name="pit" tickpolicy="delay"/>
-    <timer name="rtc" tickpolicy="catchup"/>
-    <timer name="hpet" present="no"/>
-    <timer name="tsc" mode="native"/>
-    <timer name="hypervclock" present="yes"/>
+  <clock offset="localtime">
     <timer name="pit" tickpolicy="delay"/>
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="hpet" present="no"/>
@@ -63,9 +57,10 @@
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
-      <source file="/var/lib/libvirt/images/win10.qcow2"/>
-      <target dev="sdf" bus="sata"/>
-      <address type="drive" controller="0" bus="0" target="0" unit="5"/>
+      <source file="/mnt/d/vms/win10.qcow2"/>
+      <target dev="vda" bus="virtio"/>
+      <boot order="1"/>
+      <address type="pci" domain="0x0000" bus="0x04" slot="0x00" function="0x0"/>
     </disk>
     <controller type="usb" index="0" model="qemu-xhci" ports="15">
       <address type="pci" domain="0x0000" bus="0x02" slot="0x00" function="0x0"/>
@@ -101,38 +96,32 @@
     </controller>
     <controller type="pci" index="6" model="pcie-root-port">
       <model name="pcie-root-port"/>
-      <target chassis="6" port="0x8"/>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x01" function="0x0" multifunction="on"/>
+      <target chassis="6" port="0x15"/>
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x02" function="0x5"/>
     </controller>
     <controller type="pci" index="7" model="pcie-root-port">
       <model name="pcie-root-port"/>
-      <target chassis="7" port="0x9"/>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x01" function="0x1"/>
+      <target chassis="7" port="0x16"/>
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x02" function="0x6"/>
     </controller>
     <controller type="pci" index="8" model="pcie-root-port">
       <model name="pcie-root-port"/>
-      <target chassis="8" port="0xa"/>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x01" function="0x2"/>
+      <target chassis="8" port="0x17"/>
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x02" function="0x7"/>
     </controller>
     <controller type="pci" index="9" model="pcie-root-port">
       <model name="pcie-root-port"/>
-      <target chassis="9" port="0xb"/>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x01" function="0x3"/>
+      <target chassis="9" port="0x18"/>
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x03" function="0x0"/>
     </controller>
     <controller type="virtio-serial" index="0">
       <address type="pci" domain="0x0000" bus="0x03" slot="0x00" function="0x0"/>
     </controller>
     <interface type="network">
-      <mac address="52:54:00:01:89:7c"/>
+      <mac address="52:54:00:ee:ed:c8"/>
       <source network="default"/>
       <model type="virtio"/>
       <address type="pci" domain="0x0000" bus="0x01" slot="0x00" function="0x0"/>
-    </interface>
-    <interface type="network">
-      <mac address="52:54:00:88:f9:3a"/>
-      <source network="default"/>
-      <model type="virtio"/>
-      <address type="pci" domain="0x0000" bus="0x09" slot="0x00" function="0x0"/>
     </interface>
     <serial type="pty">
       <target type="isa-serial" port="0">
@@ -142,10 +131,6 @@
     <console type="pty">
       <target type="serial" port="0"/>
     </console>
-    <channel type="spicevmc">
-      <target type="virtio" name="com.redhat.spice.0"/>
-      <address type="virtio-serial" controller="0" bus="0" port="1"/>
-    </channel>
     <input type="tablet" bus="usb">
       <address type="usb" bus="0" port="1"/>
     </input>
@@ -154,10 +139,8 @@
     <graphics type="spice" autoport="yes">
       <listen type="address"/>
       <image compression="off"/>
+      <gl enable="no"/>
     </graphics>
-    <sound model="ich9">
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x1b" function="0x0"/>
-    </sound>
     <audio id="1" type="spice"/>
     <video>
       <model type="none"/>
@@ -167,28 +150,35 @@
         <address domain="0x0000" bus="0x05" slot="0x00" function="0x0"/>
       </source>
       <rom file="/home/mia/Documents/vbios/2080s.rom"/>
-      <address type="pci" domain="0x0000" bus="0x05" slot="0x00" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
         <address domain="0x0000" bus="0x05" slot="0x00" function="0x1"/>
       </source>
       <rom file="/home/mia/Documents/vbios/2080s.rom"/>
-      <address type="pci" domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x07" slot="0x00" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
         <address domain="0x0000" bus="0x05" slot="0x00" function="0x2"/>
       </source>
       <rom file="/home/mia/Documents/vbios/2080s.rom"/>
-      <address type="pci" domain="0x0000" bus="0x07" slot="0x00" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x08" slot="0x00" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
         <address domain="0x0000" bus="0x05" slot="0x00" function="0x3"/>
       </source>
       <rom file="/home/mia/Documents/vbios/2080s.rom"/>
-      <address type="pci" domain="0x0000" bus="0x08" slot="0x00" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x09" slot="0x00" function="0x0"/>
+    </hostdev>
+    <hostdev mode="subsystem" type="usb" managed="yes">
+      <source>
+        <vendor id="0x08bb"/>
+        <product id="0x2902"/>
+      </source>
+      <address type="usb" bus="0" port="6"/>
     </hostdev>
     <hostdev mode="subsystem" type="usb" managed="yes">
       <source>
@@ -202,35 +192,7 @@
         <vendor id="0x046d"/>
         <product id="0xc332"/>
       </source>
-      <address type="usb" bus="0" port="6"/>
-    </hostdev>
-    <hostdev mode="subsystem" type="usb" managed="yes">
-      <source>
-        <vendor id="0x2040"/>
-        <product id="0xe524"/>
-      </source>
       <address type="usb" bus="0" port="5"/>
-    </hostdev>
-    <hostdev mode="subsystem" type="usb" managed="yes">
-      <source>
-        <vendor id="0x08bb"/>
-        <product id="0x2902"/>
-      </source>
-      <address type="usb" bus="0" port="7"/>
-    </hostdev>
-    <hostdev mode="subsystem" type="usb" managed="yes">
-      <source>
-        <vendor id="0x056a"/>
-        <product id="0x0374"/>
-      </source>
-      <address type="usb" bus="0" port="8"/>
-    </hostdev>
-    <hostdev mode="subsystem" type="usb" managed="yes">
-      <source>
-        <vendor id="0x0bda"/>
-        <product id="0x0567"/>
-      </source>
-      <address type="usb" bus="0" port="9"/>
     </hostdev>
     <redirdev bus="usb" type="spicevmc">
       <address type="usb" bus="0" port="2"/>
@@ -239,7 +201,7 @@
       <address type="usb" bus="0" port="3"/>
     </redirdev>
     <memballoon model="virtio">
-      <address type="pci" domain="0x0000" bus="0x04" slot="0x00" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x05" slot="0x00" function="0x0"/>
     </memballoon>
   </devices>
 </domain>
