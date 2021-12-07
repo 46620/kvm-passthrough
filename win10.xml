@@ -1,6 +1,6 @@
 <domain type="kvm">
   <name>win10</name>
-  <uuid>1359b45d-4ac7-4fba-8907-b41747e9c087</uuid>
+  <uuid>aa6020c4-2438-459a-90f1-1bcf2ce82c44</uuid>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
       <libosinfo:os id="http://microsoft.com/win/10"/>
@@ -13,6 +13,7 @@
     <type arch="x86_64" machine="pc-q35-6.1">hvm</type>
     <loader readonly="yes" type="rom">/usr/share/edk2-ovmf/x64/OVMF_CODE.fd</loader>
     <nvram>/var/lib/libvirt/qemu/nvram/win10_VARS.fd</nvram>
+    <bootmenu enable="no"/>
   </os>
   <features>
     <acpi/>
@@ -26,6 +27,7 @@
       <synic state="on"/>
       <stimer state="on"/>
       <reset state="on"/>
+      <vendor_id state="on" value="cum"/>
       <frequencies state="on"/>
     </hyperv>
     <kvm>
@@ -38,6 +40,7 @@
     <topology sockets="1" dies="1" cores="5" threads="2"/>
     <cache mode="passthrough"/>
     <feature policy="disable" name="hypervisor"/>
+    <feature policy="require" name="topoext"/>
   </cpu>
   <clock offset="localtime">
     <timer name="pit" tickpolicy="delay"/>
@@ -56,17 +59,14 @@
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2"/>
-      <source file="/mnt/d/vms/win10.qcow2"/>
+      <driver name="qemu" type="qcow2" cache="writeback"/>
+      <source file="/var/lib/libvirt/images/win10.qcow2"/>
       <target dev="vda" bus="virtio"/>
       <boot order="1"/>
       <address type="pci" domain="0x0000" bus="0x04" slot="0x00" function="0x0"/>
     </disk>
     <controller type="usb" index="0" model="qemu-xhci" ports="15">
       <address type="pci" domain="0x0000" bus="0x02" slot="0x00" function="0x0"/>
-    </controller>
-    <controller type="sata" index="0">
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x1f" function="0x2"/>
     </controller>
     <controller type="pci" index="0" model="pcie-root"/>
     <controller type="pci" index="1" model="pcie-root-port">
@@ -117,34 +117,18 @@
     <controller type="virtio-serial" index="0">
       <address type="pci" domain="0x0000" bus="0x03" slot="0x00" function="0x0"/>
     </controller>
+    <controller type="sata" index="0">
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x1f" function="0x2"/>
+    </controller>
     <interface type="network">
-      <mac address="52:54:00:ee:ed:c8"/>
+      <mac address="52:54:00:15:5a:70"/>
       <source network="default"/>
       <model type="virtio"/>
       <address type="pci" domain="0x0000" bus="0x01" slot="0x00" function="0x0"/>
     </interface>
-    <serial type="pty">
-      <target type="isa-serial" port="0">
-        <model name="isa-serial"/>
-      </target>
-    </serial>
-    <console type="pty">
-      <target type="serial" port="0"/>
-    </console>
-    <input type="tablet" bus="usb">
-      <address type="usb" bus="0" port="1"/>
-    </input>
     <input type="mouse" bus="ps2"/>
     <input type="keyboard" bus="ps2"/>
-    <graphics type="spice" autoport="yes">
-      <listen type="address"/>
-      <image compression="off"/>
-      <gl enable="no"/>
-    </graphics>
     <audio id="1" type="spice"/>
-    <video>
-      <model type="none"/>
-    </video>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
         <address domain="0x0000" bus="0x05" slot="0x00" function="0x0"/>
@@ -175,31 +159,25 @@
     </hostdev>
     <hostdev mode="subsystem" type="usb" managed="yes">
       <source>
-        <vendor id="0x08bb"/>
-        <product id="0x2902"/>
+        <vendor id="0x046d"/>
+        <product id="0xc332"/>
       </source>
-      <address type="usb" bus="0" port="6"/>
+      <address type="usb" bus="0" port="4"/>
     </hostdev>
     <hostdev mode="subsystem" type="usb" managed="yes">
       <source>
         <vendor id="0x04d9"/>
         <product id="0x0296"/>
       </source>
-      <address type="usb" bus="0" port="4"/>
+      <address type="usb" bus="0" port="5"/>
     </hostdev>
     <hostdev mode="subsystem" type="usb" managed="yes">
       <source>
-        <vendor id="0x046d"/>
-        <product id="0xc332"/>
+        <vendor id="0x08bb"/>
+        <product id="0x2902"/>
       </source>
-      <address type="usb" bus="0" port="5"/>
+      <address type="usb" bus="0" port="1"/>
     </hostdev>
-    <redirdev bus="usb" type="spicevmc">
-      <address type="usb" bus="0" port="2"/>
-    </redirdev>
-    <redirdev bus="usb" type="spicevmc">
-      <address type="usb" bus="0" port="3"/>
-    </redirdev>
     <memballoon model="virtio">
       <address type="pci" domain="0x0000" bus="0x05" slot="0x00" function="0x0"/>
     </memballoon>
