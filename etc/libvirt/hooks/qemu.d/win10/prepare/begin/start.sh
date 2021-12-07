@@ -25,9 +25,9 @@ modprobe -r nvidia_uvm
 modprobe -r i2c_nvidia_gpu
 modprobe -r nvidia_drm
 modprobe -r nvidia_modeset
-modprobe -r drm_kms_helper
+#modprobe -r drm_kms_helper
 modprobe -r nvidia
-modprobe -r drm
+#modprobe -r drm
 
 # Unbind GPU*
 virsh nodedev-detach $VIRSH_GPU_VIDEO
