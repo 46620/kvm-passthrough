@@ -1,6 +1,6 @@
 <domain type="kvm">
-  <name>win10</name>
-  <uuid>a4f6fd33-d251-494c-b78e-919b31f7b030</uuid>
+  <name>Windows</name>
+  <uuid>e7fe8168-630c-465f-960d-15651b62f599</uuid>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
       <libosinfo:os id="http://microsoft.com/win/10"/>
@@ -10,18 +10,17 @@
   <currentMemory unit="KiB">8392704</currentMemory>
   <vcpu placement="static">6</vcpu>
   <cputune>
-    <vcpupin vcpu="0" cpuset="1"/>
-    <vcpupin vcpu="1" cpuset="7"/>
-    <vcpupin vcpu="2" cpuset="2"/>
-    <vcpupin vcpu="3" cpuset="8"/>
-    <vcpupin vcpu="4" cpuset="3"/>
-    <vcpupin vcpu="5" cpuset="6"/>
+    <vcpupin vcpu="0" cpuset="0"/>
+    <vcpupin vcpu="1" cpuset="6"/>
+    <vcpupin vcpu="2" cpuset="1"/>
+    <vcpupin vcpu="3" cpuset="7"/>
+    <vcpupin vcpu="4" cpuset="2"/>
+    <vcpupin vcpu="5" cpuset="8"/>
   </cputune>
   <os>
     <type arch="x86_64" machine="pc-q35-6.2">hvm</type>
-    <loader readonly="yes" type="pflash">/usr/share/edk2-ovmf/x64/OVMF_CODE.fd</loader>
-    <nvram>/var/lib/libvirt/qemu/nvram/win10_VARS.fd</nvram>
-    <bootmenu enable="yes"/>
+    <loader readonly="yes" secure="yes" type="rom">/usr/share/edk2-ovmf/x64/OVMF_CODE.fd</loader>
+    <nvram>/var/lib/libvirt/qemu/nvram/Windows_VARS.fd</nvram>
   </os>
   <features>
     <acpi/>
@@ -42,6 +41,7 @@
       <hidden state="on"/>
     </kvm>
     <vmport state="off"/>
+    <smm state="on"/>
     <ioapic driver="kvm"/>
   </features>
   <cpu mode="host-passthrough" check="none" migratable="on">
@@ -69,7 +69,7 @@
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/var/lib/libvirt/images/win10.qcow2"/>
       <target dev="vda" bus="virtio"/>
-      <boot order="1"/>
+      <boot order="2"/>
       <address type="pci" domain="0x0000" bus="0x04" slot="0x00" function="0x0"/>
     </disk>
     <controller type="usb" index="0" model="qemu-xhci" ports="15">
@@ -162,7 +162,7 @@
       <address type="pci" domain="0x0000" bus="0x03" slot="0x00" function="0x0"/>
     </controller>
     <interface type="network">
-      <mac address="52:54:00:b5:c7:8d"/>
+      <mac address="52:54:00:77:3e:c7"/>
       <source network="default"/>
       <model type="virtio"/>
       <address type="pci" domain="0x0000" bus="0x01" slot="0x00" function="0x0"/>
@@ -180,16 +180,16 @@
       <address type="virtio-serial" controller="0" bus="0" port="1"/>
     </channel>
     <input type="mouse" bus="ps2"/>
-    <input type="keyboard" bus="virtio">
-      <address type="pci" domain="0x0000" bus="0x07" slot="0x00" function="0x0"/>
-    </input>
     <input type="keyboard" bus="ps2"/>
+    <tpm model="tpm-crb">
+      <backend type="emulator" version="2.0"/>
+    </tpm>
     <graphics type="spice" autoport="yes">
       <listen type="address"/>
       <image compression="off"/>
     </graphics>
-    <sound model="ich6">
-      <address type="pci" domain="0x0000" bus="0x10" slot="0x02" function="0x0"/>
+    <sound model="ich9">
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x1b" function="0x0"/>
     </sound>
     <audio id="1" type="spice"/>
     <video>
@@ -199,7 +199,7 @@
       <source>
         <address domain="0x0000" bus="0x03" slot="0x00" function="0x0"/>
       </source>
-      <address type="pci" domain="0x0000" bus="0x05" slot="0x00" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x07" slot="0x00" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
@@ -220,12 +220,14 @@
       <address type="pci" domain="0x0000" bus="0x0a" slot="0x00" function="0x0"/>
     </hostdev>
     <redirdev bus="usb" type="spicevmc">
-      <address type="usb" bus="0" port="2"/>
+      <address type="usb" bus="0" port="1"/>
     </redirdev>
     <redirdev bus="usb" type="spicevmc">
-      <address type="usb" bus="0" port="3"/>
+      <address type="usb" bus="0" port="2"/>
     </redirdev>
-    <memballoon model="none"/>
+    <memballoon model="virtio">
+      <address type="pci" domain="0x0000" bus="0x05" slot="0x00" function="0x0"/>
+    </memballoon>
     <shmem name="looking-glass">
       <model type="ivshmem-plain"/>
       <size unit="M">32</size>
