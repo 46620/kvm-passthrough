@@ -1,25 +1,29 @@
 <domain type="kvm">
   <name>Windows</name>
-  <uuid>e7fe8168-630c-465f-960d-15651b62f599</uuid>
+  <uuid>e418056b-3c6f-45d3-a3a8-3aae3918dd9e</uuid>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
       <libosinfo:os id="http://microsoft.com/win/10"/>
     </libosinfo:libosinfo>
   </metadata>
-  <memory unit="KiB">8392704</memory>
-  <currentMemory unit="KiB">8392704</currentMemory>
-  <vcpu placement="static">6</vcpu>
+  <memory unit="KiB">16785408</memory>
+  <currentMemory unit="KiB">16785408</currentMemory>
+  <vcpu placement="static">10</vcpu>
   <cputune>
-    <vcpupin vcpu="0" cpuset="0"/>
-    <vcpupin vcpu="1" cpuset="6"/>
-    <vcpupin vcpu="2" cpuset="1"/>
-    <vcpupin vcpu="3" cpuset="7"/>
-    <vcpupin vcpu="4" cpuset="2"/>
-    <vcpupin vcpu="5" cpuset="8"/>
+    <vcpupin vcpu="0" cpuset="1"/>
+    <vcpupin vcpu="1" cpuset="7"/>
+    <vcpupin vcpu="2" cpuset="2"/>
+    <vcpupin vcpu="3" cpuset="8"/>
+    <vcpupin vcpu="4" cpuset="3"/>
+    <vcpupin vcpu="5" cpuset="9"/>
+    <vcpupin vcpu="6" cpuset="4"/>
+    <vcpupin vcpu="7" cpuset="10"/>
+    <vcpupin vcpu="8" cpuset="5"/>
+    <vcpupin vcpu="9" cpuset="11"/>
   </cputune>
   <os>
     <type arch="x86_64" machine="pc-q35-6.2">hvm</type>
-    <loader readonly="yes" secure="yes" type="rom">/usr/share/edk2-ovmf/x64/OVMF_CODE.fd</loader>
+    <loader readonly="yes" secure="yes" type="pflash">/usr/share/edk2-ovmf/x64/OVMF_CODE.secboot.fd</loader>
     <nvram>/var/lib/libvirt/qemu/nvram/Windows_VARS.fd</nvram>
   </os>
   <features>
@@ -34,7 +38,7 @@
       <synic state="on"/>
       <stimer state="on"/>
       <reset state="on"/>
-      <vendor_id state="on" value="buttplug"/>
+      <vendor_id state="on" value="cum fard"/>
       <frequencies state="on"/>
     </hyperv>
     <kvm>
@@ -45,7 +49,7 @@
     <ioapic driver="kvm"/>
   </features>
   <cpu mode="host-passthrough" check="none" migratable="on">
-    <topology sockets="1" dies="1" cores="3" threads="2"/>
+    <topology sockets="1" dies="1" cores="5" threads="2"/>
     <cache mode="passthrough"/>
     <feature policy="disable" name="hypervisor"/>
   </cpu>
@@ -153,7 +157,7 @@
     </controller>
     <controller type="pci" index="16" model="pcie-to-pci-bridge">
       <model name="pcie-pci-bridge"/>
-      <address type="pci" domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x05" slot="0x00" function="0x0"/>
     </controller>
     <controller type="sata" index="0">
       <address type="pci" domain="0x0000" bus="0x00" slot="0x1f" function="0x2"/>
@@ -162,7 +166,7 @@
       <address type="pci" domain="0x0000" bus="0x03" slot="0x00" function="0x0"/>
     </controller>
     <interface type="network">
-      <mac address="52:54:00:77:3e:c7"/>
+      <mac address="52:54:00:10:39:9c"/>
       <source network="default"/>
       <model type="virtio"/>
       <address type="pci" domain="0x0000" bus="0x01" slot="0x00" function="0x0"/>
@@ -180,8 +184,11 @@
       <address type="virtio-serial" controller="0" bus="0" port="1"/>
     </channel>
     <input type="mouse" bus="ps2"/>
+    <input type="keyboard" bus="virtio">
+      <address type="pci" domain="0x0000" bus="0x0a" slot="0x00" function="0x0"/>
+    </input>
     <input type="keyboard" bus="ps2"/>
-    <tpm model="tpm-crb">
+    <tpm model="tpm-tis">
       <backend type="emulator" version="2.0"/>
     </tpm>
     <graphics type="spice" autoport="yes">
@@ -199,25 +206,25 @@
       <source>
         <address domain="0x0000" bus="0x03" slot="0x00" function="0x0"/>
       </source>
-      <address type="pci" domain="0x0000" bus="0x07" slot="0x00" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
         <address domain="0x0000" bus="0x03" slot="0x00" function="0x1"/>
       </source>
-      <address type="pci" domain="0x0000" bus="0x08" slot="0x00" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x07" slot="0x00" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
         <address domain="0x0000" bus="0x03" slot="0x00" function="0x2"/>
       </source>
-      <address type="pci" domain="0x0000" bus="0x09" slot="0x00" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x08" slot="0x00" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
         <address domain="0x0000" bus="0x03" slot="0x00" function="0x3"/>
       </source>
-      <address type="pci" domain="0x0000" bus="0x0a" slot="0x00" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x09" slot="0x00" function="0x0"/>
     </hostdev>
     <redirdev bus="usb" type="spicevmc">
       <address type="usb" bus="0" port="1"/>
@@ -225,9 +232,7 @@
     <redirdev bus="usb" type="spicevmc">
       <address type="usb" bus="0" port="2"/>
     </redirdev>
-    <memballoon model="virtio">
-      <address type="pci" domain="0x0000" bus="0x05" slot="0x00" function="0x0"/>
-    </memballoon>
+    <memballoon model="none"/>
     <shmem name="looking-glass">
       <model type="ivshmem-plain"/>
       <size unit="M">32</size>
