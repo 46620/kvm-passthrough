@@ -20,4 +20,4 @@ In each of the scripts I labeled each area with a * to mark what needs to be mod
 
 # Guide
 
-My personal guide of this can be found [here](https://guides.46620.moe/machine/linux/1gpu_pass/)
+My personal guide of this can be found [here](https://guides.46620.moe/machine/linux/gpu_passthrough/setup/)
