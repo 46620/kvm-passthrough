@@ -1,30 +1,28 @@
 <domain type="kvm">
-  <name>Windows</name>
-  <uuid>e418056b-3c6f-45d3-a3a8-3aae3918dd9e</uuid>
+  <name>win10</name>
+  <uuid>fa5ddf48-0d11-48d8-983a-002176fe358e</uuid>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
       <libosinfo:os id="http://microsoft.com/win/10"/>
     </libosinfo:libosinfo>
   </metadata>
-  <memory unit="KiB">16785408</memory>
-  <currentMemory unit="KiB">16785408</currentMemory>
-  <vcpu placement="static">10</vcpu>
+  <memory unit="KiB">16580608</memory>
+  <currentMemory unit="KiB">16580608</currentMemory>
+  <vcpu placement="static">8</vcpu>
   <cputune>
-    <vcpupin vcpu="0" cpuset="1"/>
-    <vcpupin vcpu="1" cpuset="7"/>
-    <vcpupin vcpu="2" cpuset="2"/>
-    <vcpupin vcpu="3" cpuset="8"/>
-    <vcpupin vcpu="4" cpuset="3"/>
-    <vcpupin vcpu="5" cpuset="9"/>
-    <vcpupin vcpu="6" cpuset="4"/>
-    <vcpupin vcpu="7" cpuset="10"/>
-    <vcpupin vcpu="8" cpuset="5"/>
-    <vcpupin vcpu="9" cpuset="11"/>
+    <vcpupin vcpu="0" cpuset="0"/>
+    <vcpupin vcpu="1" cpuset="12"/>
+    <vcpupin vcpu="2" cpuset="1"/>
+    <vcpupin vcpu="3" cpuset="13"/>
+    <vcpupin vcpu="4" cpuset="2"/>
+    <vcpupin vcpu="5" cpuset="14"/>
+    <vcpupin vcpu="6" cpuset="3"/>
+    <vcpupin vcpu="7" cpuset="15"/>
   </cputune>
   <os>
-    <type arch="x86_64" machine="pc-q35-6.2">hvm</type>
-    <loader readonly="yes" secure="yes" type="pflash">/usr/share/edk2-ovmf/x64/OVMF_CODE.secboot.fd</loader>
-    <nvram>/var/lib/libvirt/qemu/nvram/Windows_VARS.fd</nvram>
+    <type arch="x86_64" machine="pc-q35-7.0">hvm</type>
+    <loader readonly="yes" type="rom">/usr/share/edk2-ovmf/x64/OVMF_CODE.fd</loader>
+    <nvram>/var/lib/libvirt/qemu/nvram/win10_VARS.fd</nvram>
   </os>
   <features>
     <acpi/>
@@ -38,19 +36,19 @@
       <synic state="on"/>
       <stimer state="on"/>
       <reset state="on"/>
-      <vendor_id state="on" value="cum fard"/>
+      <vendor_id state="on" value="femboylinux"/>
       <frequencies state="on"/>
     </hyperv>
     <kvm>
       <hidden state="on"/>
     </kvm>
     <vmport state="off"/>
-    <smm state="on"/>
     <ioapic driver="kvm"/>
   </features>
   <cpu mode="host-passthrough" check="none" migratable="on">
-    <topology sockets="1" dies="1" cores="5" threads="2"/>
+    <topology sockets="1" dies="1" cores="4" threads="2"/>
     <cache mode="passthrough"/>
+    <feature policy="require" name="topoext"/>
     <feature policy="disable" name="hypervisor"/>
   </cpu>
   <clock offset="localtime">
@@ -75,6 +73,13 @@
       <target dev="vda" bus="virtio"/>
       <boot order="2"/>
       <address type="pci" domain="0x0000" bus="0x04" slot="0x00" function="0x0"/>
+    </disk>
+    <disk type="file" device="cdrom">
+      <driver name="qemu" type="raw"/>
+      <source file="/mnt/d/isos/virtio-win-0.1.215.iso"/>
+      <target dev="sdc" bus="sata"/>
+      <readonly/>
+      <address type="drive" controller="0" bus="0" target="0" unit="2"/>
     </disk>
     <controller type="usb" index="0" model="qemu-xhci" ports="15">
       <address type="pci" domain="0x0000" bus="0x02" slot="0x00" function="0x0"/>
@@ -152,12 +157,12 @@
     </controller>
     <controller type="pci" index="15" model="pcie-root-port">
       <model name="pcie-root-port"/>
-      <target chassis="15" port="0x1e"/>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x03" function="0x6"/>
+      <target chassis="15" port="0x8"/>
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x01" function="0x0"/>
     </controller>
     <controller type="pci" index="16" model="pcie-to-pci-bridge">
       <model name="pcie-pci-bridge"/>
-      <address type="pci" domain="0x0000" bus="0x05" slot="0x00" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x0a" slot="0x00" function="0x0"/>
     </controller>
     <controller type="sata" index="0">
       <address type="pci" domain="0x0000" bus="0x00" slot="0x1f" function="0x2"/>
@@ -166,7 +171,7 @@
       <address type="pci" domain="0x0000" bus="0x03" slot="0x00" function="0x0"/>
     </controller>
     <interface type="network">
-      <mac address="52:54:00:10:39:9c"/>
+      <mac address="52:54:00:6a:e7:44"/>
       <source network="default"/>
       <model type="virtio"/>
       <address type="pci" domain="0x0000" bus="0x01" slot="0x00" function="0x0"/>
@@ -185,12 +190,9 @@
     </channel>
     <input type="mouse" bus="ps2"/>
     <input type="keyboard" bus="virtio">
-      <address type="pci" domain="0x0000" bus="0x0a" slot="0x00" function="0x0"/>
+      <address type="pci" domain="0x0000" bus="0x05" slot="0x00" function="0x0"/>
     </input>
     <input type="keyboard" bus="ps2"/>
-    <tpm model="tpm-tis">
-      <backend type="emulator" version="2.0"/>
-    </tpm>
     <graphics type="spice" autoport="yes">
       <listen type="address"/>
       <image compression="off"/>
